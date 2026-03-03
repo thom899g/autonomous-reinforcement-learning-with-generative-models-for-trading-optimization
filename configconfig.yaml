@@ -1,0 +1,77 @@
+trading:
+  symbols:
+    - "BTC/USDT"
+    - "ETH/USDT"
+    - "BNB/USDT"
+  exchanges:
+    binance:
+      enabled: true
+      rate_limit: 1200
+      timeout: 30000
+    kraken:
+      enabled: false
+      rate_limit: 180
+      timeout: 30000
+  
+  trading_hours: "24/7"
+  max_position_size: 0.1
+  max_leverage: 3
+  stop_loss_percent: 0.02
+  take_profit_percent: 0.04
+
+rl_training:
+  environment:
+    observation_window: 100
+    features:
+      - "open"
+      - "high"
+      - "low"
+      - "close"
+      - "volume"
+      - "rsi"
+      - "macd"
+      - "bb_upper"
+      - "bb_lower"
+    
+    action_space: 3  # 0: Hold, 1: Buy, 2: Sell
+    initial_balance: 10000.0
+    transaction_cost: 0.001
+  
+  agent:
+    algorithm: "PPO"
+    learning_rate: 0.0003
+    gamma: 0.99
+    batch_size: 64
+    buffer_size: 10000
+    target_update_frequency: 100
+    exploration_start: 1.0
+    exploration_end: 0.01
+    exploration_decay: 0.995
+
+generative_model:
+  type: "VAE-GAN"
+  latent_dim: 32
+  sequence_length: 100
+  hidden_units: 256
+  dropout_rate: 0.2
+  validation_split: 0.2
+  
+  training:
+    epochs: 100
+    batch_size: 32
+    learning_rate: 0.0001
+    patience: 10
+
+firebase:
+  collection_names:
+    trading_state: "trading_states"
+    synthetic_data: "synthetic_data"
+    trading_logs: "trading_logs"
+    model_versions: "model_versions"
+    performance_metrics: "performance_metrics"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  max_file_size_mb: 100
+  backup_count: 5
